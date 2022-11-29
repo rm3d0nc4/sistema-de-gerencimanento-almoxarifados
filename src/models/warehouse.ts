@@ -17,6 +17,26 @@ export class WareHouse {
         return this._id;
     }
 
+    insertItem(item: Item): void {
+        this._inventoryItens.insertItem(item);
+    }
+
+    consultItem(id: number): Item {
+        return this._inventoryItens.consultItem(id);
+    }
+
+    consultItemIndex(id: number): number {
+        return this._inventoryItens.consultItemIndex(id);
+    }
+
+    removeItem(id: number): void {
+        this._inventoryItens.removeItem(id);
+    }
+
+    updateItem(id: number, newItem: Item) {
+        this._inventoryItens.updateItem(id, newItem);
+    }
+
 }
 
 let w1: WareHouse = new WareHouse(1, new ItemArrayRepository());
