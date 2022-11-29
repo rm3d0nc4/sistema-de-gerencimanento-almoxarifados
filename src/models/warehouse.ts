@@ -19,4 +19,4 @@ export class WareHouse {
 
 }
 
-let w1: WareHouse = new WareHouse(1, new ItemArrayRepository())
+let w1: WareHouse = new WareHouse(1, new ItemArrayRepository());
