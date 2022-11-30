@@ -41,11 +41,11 @@ export class ItemArrayRepository implements IItemRepository {
 
     removeItem(id: number): void {
         let index: number = this.consultItemIndex(id);
-        let aux: Item = this._itens[index];
+        /* let aux: Item = this._itens[index];
         this._itens[index] = this._itens[this._itens.length - 1];
-        this._itens[this._itens.length - 1] = aux;
+        this._itens[this._itens.length - 1] = aux; */
         
-        this._itens.pop();
+        this._itens.splice(index, 1);
     }
 
     updateItem(id: number, newItem: Item): void {
