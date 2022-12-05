@@ -1,5 +1,3 @@
-import { syncIndexes } from "mongoose";
-import { getHeapStatistics } from "v8";
 import { ExpirationDateErrors, InventoryError } from "../errors/errors";
 import { IItemRepository } from "../interfaces/item_repository_interface";
 import { Item } from "../models/item";
