@@ -1,10 +1,9 @@
-import { Item } from "../models/item";
+import Item from "../models/item";
 
 export interface IItemRepository {
 
     insertItem(item: Item): void;
-    consultItem(id: number): Item;
-    consultItemIndex(id: number): number;
-    removeItem(id: number): void;
+    findItemById(id: number): Promise<Item>;
     updateItem(id: number, newItem: Item): void
+    deleteItem(id: number): void;
 }
