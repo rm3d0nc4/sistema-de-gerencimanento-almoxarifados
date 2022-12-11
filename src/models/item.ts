@@ -1,36 +1,41 @@
-export class Item {
+
+export default class Item {
     private _id: number;
     private _description: string;
-    private _insertionDate: Date;
-    private _amount: number;
-    private _location: string;
 
-    constructor(id: number, description: string, insertionDate: Date, amount: number, location: string) {
-        this._id = id;
-        this._description = description;
-        this._insertionDate = insertionDate;
-        this._amount = amount;
-        this._location = location;
+    constructor(id: number, description: string) {
+            this._id = id;
+            this._description = description;
     }
-
-
-    get id() {
+    
+    get id(): number {
         return this._id;
     }
 
-    get description() {
+    get description(): string {
         return this._description;
     }
 
-    get insertionDate() {
-        return this._insertionDate;
+    set id(newId: number){
+        this._id = newId;
     }
 
-    get amount() {
-        return this._amount;
+    set description(newDescription: string) {
+        this._description = newDescription;
     }
 
-    get location() {
-        return this._location;
+    toList(): Array<any> {
+        let objectList: Array<any> = new Array();
+        objectList[0] = this._id;
+        objectList[1] = this._description;
+        return objectList;
     }
+
+    static fromObject(data: Object): Item {
+        let values: any[]= Object.values(data);
+        let item: Item = new Item(values[0], values[1]);
+
+        return item;
+    }
+
 }

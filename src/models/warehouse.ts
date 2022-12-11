@@ -1,42 +1,22 @@
-import { IItemRepository} from "../interfaces/item_repository_interface";
-import { ItemArrayRepository } from "../repositories/array_repository";
-import { Item } from "./item";
-
 export class WareHouse {
     private _id: number;
-    private _inventoryItens: IItemRepository;
-    //historicoSaida;
-    //Solicitacoes;
+    private _name: string;
 
-    constructor(id: number, inventory: IItemRepository) {
+    constructor(id: number, name: string) {
         this._id = id;
-        this._inventoryItens = inventory;
+        this._name = name;
     }
 
     get id(): number {
         return this._id;
     }
 
-    insertItem(item: Item): void {
-        this._inventoryItens.insertItem(item);
+    get name(): string {
+        return this._name;
     }
-
-    consultItem(id: number): Item {
-        return this._inventoryItens.consultItem(id);
+    
+    static fromObject(data: Object) {
+        let values: Array<any> = Object.values(data);
+        return new WareHouse(values[0], values[1]);
     }
-
-    consultItemIndex(id: number): number {
-        return this._inventoryItens.consultItemIndex(id);
-    }
-
-    removeItem(id: number): void {
-        this._inventoryItens.removeItem(id);
-    }
-
-    updateItem(id: number, newItem: Item) {
-        this._inventoryItens.updateItem(id, newItem);
-    }
-
 }
-
-let w1: WareHouse = new WareHouse(1, new ItemArrayRepository());
