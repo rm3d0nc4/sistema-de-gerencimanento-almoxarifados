@@ -46,6 +46,7 @@ export default class ItemRepository implements IItemRepository {
     }
 
     async deleteItem(id: number): Promise<void> {
+        await this.findItemById(id);
         await this._database.exec(`DELETE FROM ITEM WHERE ITEM_ID = ${id}`);
     }
     
