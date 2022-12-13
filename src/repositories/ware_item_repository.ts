@@ -1,6 +1,6 @@
 import { Database } from "sqlite";
+import PerishableExpired from "../errors/perishable_expired_error";
 import WarehouseItemNotFoundError from "../errors/ware_item_not_found_error";
-import IWareHouseRepository from "../interfaces/warehouse_repository_interface";
 import IWareItemRepository from "../interfaces/ware_item_repository_interface";
 import Item from "../models/item";
 import { Perishable } from "../models/perishable";
@@ -68,7 +68,7 @@ export default class WareItemRepository implements IWareItemRepository {
     async findAllWareItemsByProperty(property: string, value: any): Promise<WarehouseItem[]> {
         let data: Object | undefined = await this._database.all(`SELECT * FROM WAREHOUSE_ITEM WHERE ${property} = ${value}`);
         if(data == undefined) {
-            throw new WarehouseItemNotFoundError('WareItem não cadastrado'); // Lançar Exceção
+            throw new WarehouseItemNotFoundError('WareItem não encontrado'); // Lançar Exceção
         } else {
             let values = <Array<Object>> data;
             let itemsList: WarehouseItem[] = [];
@@ -105,6 +105,11 @@ export default class WareItemRepository implements IWareItemRepository {
     }
 
     async insertWareItem(wareHouseItem: WarehouseItem): Promise<void> {
+        if(wareHouseItem instanceof Perishable) {
+            if ((<Perishable> wareHouseItem).expirationDate.getTime() > Date.now()) {
+                throw new PerishableExpired('Falha ao inserir: perecível está vencido!')
+            }
+        }
         await this._database.exec(`INSERT INTO WAREHOUSE_ITEM (
             ITEM_ID, 
             WAREHOUSE_ID, 

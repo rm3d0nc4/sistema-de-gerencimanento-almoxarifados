@@ -1,4 +1,4 @@
-import { AplicacaoError } from "./input_error";
+import AplicacaoError from "./aplication_error";
 
 class WarehouseNotFoundError extends AplicacaoError {
     constructor(message: string) {
