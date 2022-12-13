@@ -14,6 +14,10 @@ export class WareHouse {
     get name(): string {
         return this._name;
     }
+
+    set name(newName: string) {
+        this._name = newName;
+    }
     
     static fromObject(data: Object) {
         let values: Array<any> = Object.values(data);

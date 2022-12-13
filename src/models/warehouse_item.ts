@@ -46,6 +46,14 @@ export default class WarehouseItem {
         this._id = newId;
     }
 
+    set item(newItem: Item) {
+        this._item = newItem;
+    }
+
+    set warehouse(newWarehouse: WareHouse) {
+        this._warehouse = newWarehouse;
+    }
+
     set insertionDate(newInsertionDate: string) {
         this._insertionDate = new Date(newInsertionDate);
     }
