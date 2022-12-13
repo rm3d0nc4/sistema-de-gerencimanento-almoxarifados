@@ -5,20 +5,13 @@ const input: promptSync.Prompt = promptSync();
 
 class Utils {
     inputProperty(): string {
-        const menuProperties: string =  `
-        ==============================
-        ======== Propriedades ========
-        ==============================
-          [ 1 ] | Id do lote      
-          [ 2 ] | Id do Item 
-          [ 3 ] | Id do almoxarifado  
-          [ 4 ] | Data de insercao
-          [ 5 ] | Quantidade 
-          [ 6 ] | Localizacao
-          [ 7 ] | Data de vencimento
-        ==============================
-        Número da propriedade desejada:     
-        `;
+        const menuProperties: string =
+        "==================== Propriedades ====================" + "\n" +
+        "[ 1 ] | Id do lote          [ 5 ] | Quantidade"         + "\n" +
+        "[ 2 ] | Id do Item          [ 6 ] | Localizacao"        + "\n" +
+        "[ 3 ] | Id do almoxarifado  [ 7 ] | Data de vencimento" + "\n" +
+        "[ 4 ] | Data de insercao" + "\n" 
+        "Número da propriedade desejada:     "
 
         let mapProperties: Map<string, string> = new Map<string, string>();
         mapProperties.set('1','WARE_ITEM_ID');
@@ -29,14 +22,16 @@ class Utils {
         mapProperties.set('6','LOCATION');
         mapProperties.set('7','EXPIRATION_DATE');
 
-        let selectedProperty: string = input(menuProperties)
+        console.log(menuProperties);
+        let selectedProperty: string = input("Número da propriedade desejada:     ");
         if (!this.isValidNumber(selectedProperty) || !this.isInInterval(Number(selectedProperty), 1, 7)) {
             throw new InputError('Valor de propriedade inválido');
         }
         return mapProperties.get(selectedProperty);
+        this.clear();
     }
 
-    private isInInterval(value: number, min: number, max: number) {
+    isInInterval(value: number, min: number, max: number) {
         return value <= max && value >= min;
     }
     private isValidDate(dateStr: string): boolean {
@@ -106,10 +101,10 @@ class Utils {
         const location: string = input(message);
 
         if(nullable === true && location == '') return null;
-        if(!this.isValidLocation(location)) {
+        if(!this.isValidLocation(location.toUpperCase())) {
             throw new InputError('Localização inválida');
         }
-        return location;
+        return location.toUpperCase();
     }
 
     inputDate(message:string): Date {
@@ -129,6 +124,17 @@ class Utils {
         return wareItemType;
     }
 
+    continue(): void {
+        input('<ENTER> para continuar...');
+    }
+
+    print(message: string):void {
+        console.log(message);
+    }
+
+    clear = () => console.clear();
+
+    stop = () => 0;
 
 }
 
