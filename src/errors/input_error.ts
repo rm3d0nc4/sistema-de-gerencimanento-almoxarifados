@@ -1,8 +1,5 @@
-export class AplicacaoError extends Error{
-    constructor(message: string) {
-        super(message);
-    }
-}
+import AplicacaoError from "./aplication_error";
+
 
 export class InputError extends AplicacaoError {
     constructor(message: string) {
