@@ -54,7 +54,7 @@ export default class WareItemRepository implements IWareItemRepository {
             for (let value of values) {
                 let map: Map<string, any> = await this._changeObjectToMap(value);
                 let item: WarehouseItem;
-                if(map.has('EXPIRATION_DATE')) {
+                if(map.get('EXPIRATION_DATE') != 'null') {
                     item = <Perishable> Perishable.fromMap(map);
                 } else {
                     item = WarehouseItem.fromMap(map);
@@ -68,7 +68,7 @@ export default class WareItemRepository implements IWareItemRepository {
     async findAllWareItemsByProperty(property: string, value: any): Promise<WarehouseItem[]> {
         let data: Object | undefined = await this._database.all(`SELECT * FROM WAREHOUSE_ITEM WHERE ${property} = ${value}`);
         if(data == undefined) {
-            throw new WarehouseItemNotFoundError('WareItem não encontrado'); // Lançar Exceção
+            throw new WarehouseItemNotFoundError('Lotes não encontrados'); // Lançar Exceção
         } else {
             let values = <Array<Object>> data;
             let itemsList: WarehouseItem[] = [];
@@ -76,7 +76,7 @@ export default class WareItemRepository implements IWareItemRepository {
             for (let value of values) {
                 let map: Map<string, any> = await this._changeObjectToMap(value);
                 let item: WarehouseItem;
-                if(map.has('EXPIRATION_DATE')) {
+                if(map.get('EXPIRATION_DATE') != 'null') {
                     item = <Perishable> Perishable.fromMap(map);
                 } else {
                     item = WarehouseItem.fromMap(map);
@@ -88,13 +88,13 @@ export default class WareItemRepository implements IWareItemRepository {
     }
 
     async findWareItemByProperty(property: string, value: any): Promise<WarehouseItem> {
-        let data: Object | undefined = await this._database.get(`SELECT * FROM WAREHOUSE_ITEM WHERE ${property} = ${value}`)
+        let data: Object | undefined = await this._database.get(`SELECT * FROM WAREHOUSE_ITEM WHERE ${property} = '${value}'`)
         if(data == undefined) {
-            throw new Error('não achei'); // Lançar Exceção
+            throw new WarehouseItemNotFoundError('Lote não encontrado');
         } else {
             let map: Map<string, any> = await this._changeObjectToMap(data);
             let item: WarehouseItem;
-                if(map.has('EXPIRATION_DATE')) {
+                if(map.get('EXPIRATION_DATE') != 'null') {
                     item = <Perishable> Perishable.fromMap(map);
                 } else {
                     item = WarehouseItem.fromMap(map);
@@ -104,12 +104,13 @@ export default class WareItemRepository implements IWareItemRepository {
         }
     }
 
-    async insertWareItem(wareHouseItem: WarehouseItem): Promise<void> {
-        if(wareHouseItem instanceof Perishable) {
-            if ((<Perishable> wareHouseItem).expirationDate.getTime() > Date.now()) {
-                throw new PerishableExpired('Falha ao inserir: perecível está vencido!')
+    async insertWareItem(warehouseItem: WarehouseItem): Promise<void> {
+        if(warehouseItem instanceof Perishable) {
+            if ((<Perishable> warehouseItem).expirationDate.getTime() < Date.now()) {
+                throw new PerishableExpired('Falha ao inserir: perecível está vencido!');
             }
         }
+        
         await this._database.exec(`INSERT INTO WAREHOUSE_ITEM (
             ITEM_ID, 
             WAREHOUSE_ID, 
@@ -118,12 +119,12 @@ export default class WareItemRepository implements IWareItemRepository {
             LOCATION, 
             EXPIRATION_DATE
             ) VALUES (
-                ${wareHouseItem.item.id}, 
-                ${wareHouseItem.warehouse.id}, 
-                '${wareHouseItem.insertionDate}', 
-                ${wareHouseItem.amount}, 
-                '${wareHouseItem.location}', 
-                '${wareHouseItem instanceof Perishable ? wareHouseItem.expirationDate : null}')`);
+                ${warehouseItem.item.id}, 
+                ${warehouseItem.warehouse.id}, 
+                '${warehouseItem.insertionDate}', 
+                ${warehouseItem.amount}, 
+                '${warehouseItem.location}', 
+                '${warehouseItem instanceof Perishable ? warehouseItem.expirationDate : null}')`);
     }
     async updateWareItem(id: number, wareHouseItem: WarehouseItem): Promise<void> {
         await this._database.run(`UPDATE WAREHOUSE_ITEM SET (
@@ -143,6 +144,7 @@ export default class WareItemRepository implements IWareItemRepository {
     }
 
     async deleteWareItem(id: number): Promise<void> {
+        await this.findWareItemByProperty('WARE_ITEM_ID', id);
         await this._database.exec(`DELETE FROM WAREHOUSE_ITEM WHERE WARE_ITEM_ID = ${id}`);
     }
     
