@@ -20,7 +20,7 @@ export default class WarehouseRepository implements IWareHouseRepository {
                 return WareHouse.fromObject(value);
             })
             return itemsList;
-        }
+            }
     }
     
     async insertWarehouse(wareHouse: WareHouse): Promise<void> {
