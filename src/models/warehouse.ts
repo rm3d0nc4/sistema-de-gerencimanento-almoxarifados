@@ -23,4 +23,9 @@ export class WareHouse {
         let values: Array<any> = Object.values(data);
         return new WareHouse(values[0], values[1]);
     }
+
+    toString(): string {        
+        let string = `Id: ${this.id}            Nome: ${this._name}`
+        return string;
+    }
 }

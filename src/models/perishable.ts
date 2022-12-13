@@ -14,6 +14,10 @@ export class Perishable extends WarehouseItem {
     get expirationDate(): Date {
         return this._expirationDate;
     }
+    
+    get expirationDateStr(): string {
+        return  this._expirationDate.toJSON().split('T')[0];
+    }
 
     set setExpirationDate(date: Date) {
         this._expirationDate = date;
@@ -27,8 +31,18 @@ export class Perishable extends WarehouseItem {
             insertionDate: new Date(<string> map.get('INSERTION_DATE')), 
             amount: map.get('AMOUNT'), 
             location: map.get('LOCATION'),
-            expirationDate: map.get('EXPIRATION_DATE')
+            expirationDate: new Date(<string>map.get('EXPIRATION_DATE'))
         });
     }
 
+    toString(): string {
+        let string = 
+        `Id: ${this.id}                         Item: ${this.item}
+         Almoxarifado: ${this.warehouse}        Data de inserção ${this.insertionDate}
+         Quantidade: ${this.amount}             Localização: ${this.location}
+         Data de Expiração: ${this.expirationDateStr}`;
+        
+        return string;
+    }
+    
 }

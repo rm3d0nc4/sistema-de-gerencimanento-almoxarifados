@@ -87,4 +87,14 @@ export default class WarehouseItem {
             location: map.get('LOCATION'),
         });
     }
+
+    toString(): string {
+        let string = 
+        `Id: ${this.id}                         Item: ${this.item}
+         Almoxarifado: ${this.warehouse}        Data de Inserção: ${this.insertionDate}
+         Quantidade: ${this.amount}             Localização: ${this._location}`
+
+        return string;
+    }
+
 }

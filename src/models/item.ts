@@ -37,5 +37,10 @@ export default class Item {
 
         return item;
     }
+    toString(): string {
 
+        let string = `Id: ${this._id}     Descrição: ${this._description}`
+
+        return string;
+    }
 }
