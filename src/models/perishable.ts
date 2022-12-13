@@ -17,7 +17,7 @@ export class Perishable extends WarehouseItem {
 
     set setExpirationDate(date: Date) {
         this._expirationDate = date;
-    }  
+    }
 
     static fromMap(map: Map<string, any>): WarehouseItem {
         return new Perishable({
