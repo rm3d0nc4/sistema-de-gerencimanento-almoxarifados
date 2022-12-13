@@ -1,5 +1,6 @@
 
 import { Database } from "sqlite";
+import ItemNotFoundError from "../errors/item_error_not_found";
 import { IItemRepository } from "../interfaces/item_repository_interface";
 import Item from "../models/item";
 
@@ -17,7 +18,7 @@ export default class ItemRepository implements IItemRepository {
     async findItemById(id: number): Promise<Item> {
         let data: Object | undefined = await this._database.get(`SELECT * FROM ITEM WHERE ITEM_ID = ${id}`)
         if(data == undefined) {
-            throw new Error('não achei'); // Lançar Exceção
+            throw new ItemNotFoundError('Item não encontrado');
         } else {
             let item: Item = Item.fromObject(data);
             return item; 
@@ -27,7 +28,7 @@ export default class ItemRepository implements IItemRepository {
     async findAllItems(): Promise<Item[]> {
         let data: Object | undefined = await this._database.all(`SELECT * FROM ITEM`)
         if(data == undefined) {
-            throw new Error('não achei'); // Lançar Exceção
+            throw new ItemNotFoundError('Ainda não existem itens');
         } else {
             let values = <Array<Object>> data;
 

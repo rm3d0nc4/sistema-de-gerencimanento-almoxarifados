@@ -1,6 +1,7 @@
 import { Database } from 'sqlite';
 import IWareHouseRepository from '../interfaces/warehouse_repository_interface';
 import { WareHouse } from './../models/warehouse';
+import  WarehouseNotFoundError  from '../errors/ware_item_not_found_error'
 
 export default class WarehouseRepository implements IWareHouseRepository {
     _database: Database;
@@ -12,7 +13,7 @@ export default class WarehouseRepository implements IWareHouseRepository {
     async findAllWarehouses(): Promise<Array<WareHouse>> {
         let data: Object | undefined = await this._database.all(`SELECT * FROM WAREHOUSE`);
         if(data == undefined) {
-            throw new Error('não achei'); // Lançar Exceção
+            throw new WarehouseNotFoundError('Não existem Almoxaridados Cadastrados'); // Lançar Exceção
         } else {
             let values = <Array<Object>> data;
 
@@ -31,7 +32,7 @@ export default class WarehouseRepository implements IWareHouseRepository {
     async findWarehouseById(id: number): Promise<WareHouse> {
         let data: Object | undefined = await this._database.get(`SELECT * FROM WAREHOUSE WHERE WAREHOUSE_ID = ${id}`)
         if(data == undefined) {
-            throw new Error('não achei'); // Lançar Exceção
+            throw new WarehouseNotFoundError('Almoxarifado não encontrado'); // Lançar Exceção
         } else {
             let item: WareHouse = WareHouse.fromObject(data);
             return item; 
