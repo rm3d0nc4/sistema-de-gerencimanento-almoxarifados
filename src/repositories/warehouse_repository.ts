@@ -19,7 +19,7 @@ export default class WarehouseRepository implements IWareHouseRepository {
 
             let itemsList: Array<WareHouse> = values.map((value, index) => {
                 return WareHouse.fromObject(value);
-            })
+            }) 
             return itemsList;
             }
     }
@@ -40,6 +40,7 @@ export default class WarehouseRepository implements IWareHouseRepository {
     }
 
     async deleteWarehouse(id: number): Promise<void> {
+        await this.findWarehouseById(id);
         await this._database.exec(`DELETE FROM WAREHOUSE WHERE WAREHOUSE_ID = ${id}`);
     }
 
