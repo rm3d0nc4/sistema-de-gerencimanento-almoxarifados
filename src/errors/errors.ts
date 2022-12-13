@@ -15,3 +15,12 @@ export class LowInventoryError extends InventoryError {
         super(message);
     }
 }
+
+export class aplicacaoError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+
+
