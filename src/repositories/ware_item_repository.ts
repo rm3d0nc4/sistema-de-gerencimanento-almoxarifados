@@ -67,7 +67,7 @@ export default class WareItemRepository implements IWareItemRepository {
 
     async findAllWareItemsByProperty(property: string, value: any): Promise<WarehouseItem[]> {
         let data: Object | undefined = await this._database.all(`SELECT * FROM WAREHOUSE_ITEM WHERE ${property} = ${value}`);
-        if(data == undefined) {
+        if(data == undefined || (<Array<any>>data).length === 0) {
             throw new WarehouseItemNotFoundError('Lotes não encontrados'); // Lançar Exceção
         } else {
             let values = <Array<Object>> data;
