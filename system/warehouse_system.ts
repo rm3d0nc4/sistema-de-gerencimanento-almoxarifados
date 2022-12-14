@@ -225,7 +225,6 @@ export default class WarehouseSystem {
             wareItemsByProperty.forEach((wareItem) => console.log('> ' + wareItem.toString()));
             return wareItemsByProperty;
         } catch (error) {
-            console.log(error);
             console.log((<Error>error).message);
         }
     }
@@ -252,7 +251,7 @@ export default class WarehouseSystem {
             let warehouseId: number = utils.inputNumber('Id do Almoxarifado: ');
             wareItem.warehouse = await this.warehouseRepository.findWarehouseById(warehouseId);
             wareItem.amount = utils.inputNumber('Nova quantidade: ', true) ?? wareItem.amount;
-            wareItem.location = utils.inputLocation('Nova localização: ', true) ?? wareItem.location;
+            wareItem.location = utils.inputLocation('Nova localização (C_P_A_): ', true) ?? wareItem.location;
     
             await this.wareItemRepository.updateWareItem(wareItem.id, wareItem);
             console.log('Operação Sucedida!');
