@@ -1,3 +1,4 @@
 src/repositories/array_repository.ts
 database/data.db
 build/
+node_modules/
