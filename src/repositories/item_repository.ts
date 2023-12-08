@@ -1,8 +1,8 @@
 
 import { Database } from "sqlite";
 import ItemNotFoundError from "../errors/item_error_not_found";
-import { IItemRepository } from "../interfaces/item_repository_interface";
 import Item from "../models/item";
+import { IItemRepository } from "../interfaces/item_repository_interface";
 
 export default class ItemRepository implements IItemRepository {
     _database: Database;
