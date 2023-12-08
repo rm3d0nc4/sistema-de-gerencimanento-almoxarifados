@@ -8,7 +8,7 @@ export class FindWareHouseController{
     this.findWareHouseUsecase = findWareHouseUseCase
   }
 
-  async handle(id: string){
+  async handle(id: number){
     const item = await this.findWareHouseUsecase.execute(id)
     return item
   }

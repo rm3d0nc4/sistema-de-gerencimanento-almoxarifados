@@ -5,7 +5,7 @@ export interface WareHouseInsertableRepository {
 }
 
 export interface WareHouseFindableRepository {
-    find(id: string): Promise<WareHouse>;
+    find(id: number): Promise<WareHouse>;
 }
 export interface WareHouseFindableAllRepository {
     findAll(): Promise<WareHouse[]>;

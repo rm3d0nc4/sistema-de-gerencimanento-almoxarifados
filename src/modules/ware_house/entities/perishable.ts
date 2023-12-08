@@ -1,5 +1,5 @@
 import Item from "../../Item/entities/item";
-import WarehouseItem from "../../ware_house/entities/warehouse_item";
+import WarehouseItem from "../../ware_house_item/entities/warehouse_item";
 import { WareHouse } from "./warehouse";
 
 

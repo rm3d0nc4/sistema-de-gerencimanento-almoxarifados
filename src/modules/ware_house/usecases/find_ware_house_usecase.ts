@@ -4,7 +4,7 @@ import { WareHouseFindableRepository } from "../repositories/ware_house_reposito
 export class FindWareHouseUseCase{
     constructor(private repository: WareHouseFindableRepository) {}
 
-    async execute(id: string): Promise<WareHouse> {
+    async execute(id: number): Promise<WareHouse> {
         const items = await this.repository.find( id)
         return items;
     }
