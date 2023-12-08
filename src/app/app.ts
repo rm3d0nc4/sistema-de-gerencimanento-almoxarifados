@@ -1,6 +1,6 @@
 import WarehouseSystem from "../../system/warehouse_system"
 import menu from "../menu/menu";
-import utils from "../utils/utils";
+import utils from "../utils/werehouseUtils";
 
 (async () => {
     const path = 'C:/Users/PC-01/OneDrive/ADS/Mod_II/poo/codigos/projeto_sistema_almoxarifado/database/data.db';

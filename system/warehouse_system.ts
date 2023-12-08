@@ -6,7 +6,10 @@ import ItemRepository from "../src/repositories/item_repository";
 import WarehouseRepository from "../src/repositories/warehouse_repository";
 import WareItemRepository from "../src/repositories/ware_item_repository";
 import { Perishable } from '../src/models/perishable';
-import utils from '../src/utils/utils';
+import utils from '../src/utils/werehouseUtils';
+import textUtils from '../src/utils/textUtils';
+import inputUtils from '../src/utils/inputUtils';
+import numberUtils from '../src/utils/numberUtils';
 
 
 export default class WarehouseSystem {
@@ -33,7 +36,7 @@ export default class WarehouseSystem {
 
     async addItem(): Promise<void> {
         try {
-            let description: string = utils.inputText('Descrição do item: ');
+            let description: string = inputUtils.inputText('Descrição do item: ');
             let item = new Item(0, description);
             await this.itemRepository.insertItem(item);
         } catch (error) {
@@ -60,7 +63,7 @@ export default class WarehouseSystem {
 
     async findItem(): Promise<Item> {
         try {
-            let id: number = utils.inputNumber('Id do item: ');
+            let id: number = inputUtils.inputNumber('Id do item: ');
             let item: Item = await this.itemRepository.findItemById(id);
             console.log('> ' + item.toString());
             return item;
@@ -72,7 +75,7 @@ export default class WarehouseSystem {
     async editItem(): Promise<void> {
         try {
             let item = await this.findItem();
-            let newdescription = utils.inputText('Nova descrição: ', true);
+            let newdescription = inputUtils.inputText('Nova descrição: ', true);
             item.description = newdescription ?? item.description;
             await this.itemRepository.updateItem(item.id, item);
             console.log('Operação Sucedida!');
@@ -83,7 +86,7 @@ export default class WarehouseSystem {
 
     async removeItem(): Promise<void> {
         try {
-            let id: number = utils.inputNumber('Id do item: ');
+            let id: number = inputUtils.inputNumber('Id do item: ');
             await this.itemRepository.deleteItem(id);
             console.log('Operação Sucedida!');            
         } catch (error) {
@@ -93,7 +96,7 @@ export default class WarehouseSystem {
 
     async addWarehouse(): Promise<void> {
         try {
-            let name: string = utils.inputText('Nome do item: ');
+            let name: string = inputUtils.inputText('Nome do item: ');
             let warehouse: WareHouse = new WareHouse(0, name);
             await this.warehouseRepository.insertWarehouse(warehouse);
             console.log('Operação Sucedida!');
@@ -119,7 +122,7 @@ export default class WarehouseSystem {
     
     async findWarehouse(): Promise<WareHouse> {
         try {
-            let id: number = utils.inputNumber('Id do almoxarifado: ');
+            let id: number = inputUtils.inputNumber('Id do almoxarifado: ');
             let warehouse: WareHouse = await this.warehouseRepository.findWarehouseById(id);
             console.log('> ' + warehouse.toString())
             return warehouse;            
@@ -131,7 +134,7 @@ export default class WarehouseSystem {
     async editWarehouse(): Promise<void> {
         try {
             let wareHouse: WareHouse = await this.findWarehouse();
-            let newName: string = utils.inputText('Novo nome: ', true);
+            let newName: string = inputUtils.inputText('Novo nome: ', true);
             wareHouse.name = newName ?? wareHouse.name;
             await this.warehouseRepository.updateWarehouse(wareHouse.id, wareHouse);
             console.log('Operação Sucedida!');
@@ -142,7 +145,7 @@ export default class WarehouseSystem {
     
     async removeWarehouse(): Promise<void> {
         try {
-            let id: number = utils.inputNumber('Id do almoxarifado: ');
+            let id: number = inputUtils.inputNumber('Id do almoxarifado: ');
             await this.warehouseRepository.deleteWarehouse(id);
             console.log('Operação Sucedida!');
             
@@ -153,20 +156,20 @@ export default class WarehouseSystem {
     
     async addwareItem(): Promise<void> {
         try {
-            let type: string = utils.inputWareItemType('Tipo de item (N - Normal, P - Perecível): ');
-            let itemId: number = utils.inputNumber('Id do Item: ');
+            let type: string = inputUtils.inputWareItemType('Tipo de item (N - Normal, P - Perecível): ');
+            let itemId: number = inputUtils.inputNumber('Id do Item: ');
             let item: Item = await this.itemRepository.findItemById(itemId);
-            let warehouseId: number = utils.inputNumber('Id do Almoxarifado: ');
+            let warehouseId: number = inputUtils.inputNumber('Id do Almoxarifado: ');
             let warehouse = await this.warehouseRepository.findWarehouseById(warehouseId);
             let insertionDate: Date = new Date();
-            let amount: number = utils.inputNumber('Quantidade de itens:');
-            let location: string = utils.inputLocation('Localizacao (C_P_A_): ');
+            let amount: number = inputUtils.inputNumber('Quantidade de itens:');
+            let location: string = inputUtils.inputLocation('Localizacao (C_P_A_): ');
     
             let wareItem: WarehouseItem;
             
             
             if(type == 'P') {
-                let expirationDate: Date = utils.inputDate('Data de vencimeto (AAAA-MM-DD): ');
+                let expirationDate: Date = inputUtils.inputDate('Data de vencimeto (AAAA-MM-DD): ');
     
                 wareItem = new Perishable({
                     id: 0, 
@@ -213,8 +216,8 @@ export default class WarehouseSystem {
 
     async findAllWareItemByProperty(): Promise<WarehouseItem[]> {
         try {
-            let property: string = utils.inputProperty();
-            let value: string = utils.inputAlphaNumeric('Valor desejado: ');
+            let property: string = inputUtils.inputProperty();
+            let value: string = inputUtils.inputAlphaNumeric('Valor desejado: ');
             let wareItemsByProperty: WarehouseItem[] = await this.wareItemRepository.findAllWareItemsByProperty(property, value);
             console.log (
                 "=================================================" + "\n" +
@@ -232,7 +235,7 @@ export default class WarehouseSystem {
     async findWareItem(): Promise<WarehouseItem> {
         try {
             let property: string = 'WARE_ITEM_ID';
-            let value: string = utils.inputNumber('Id do item: ').toString();
+            let value: string = inputUtils.inputNumber('Id do item: ').toString();
     
             let wareItem: WarehouseItem = await this.wareItemRepository.findWareItemByProperty(property, value);
             console.log('> ' + wareItem.toString());
@@ -244,14 +247,14 @@ export default class WarehouseSystem {
 
     async editWareItem(): Promise<void> {
         try {
-            let value: string = utils.inputNumber('Id do item: ').toString();
+            let value: string = inputUtils.inputNumber('Id do item: ').toString();
             let wareItem: WarehouseItem = await this.wareItemRepository.findWareItemByProperty('WARE_ITEM_ID', value);
-            let itemId: number = utils.inputNumber('Id do Item: ');
+            let itemId: number = inputUtils.inputNumber('Id do Item: ');
             wareItem.item = await this.itemRepository.findItemById(itemId);
-            let warehouseId: number = utils.inputNumber('Id do Almoxarifado: ');
+            let warehouseId: number = inputUtils.inputNumber('Id do Almoxarifado: ');
             wareItem.warehouse = await this.warehouseRepository.findWarehouseById(warehouseId);
-            wareItem.amount = utils.inputNumber('Nova quantidade: ', true) ?? wareItem.amount;
-            wareItem.location = utils.inputLocation('Nova localização (C_P_A_): ', true) ?? wareItem.location;
+            wareItem.amount = inputUtils.inputNumber('Nova quantidade: ', true) ?? wareItem.amount;
+            wareItem.location = inputUtils.inputLocation('Nova localização (C_P_A_): ', true) ?? wareItem.location;
     
             await this.wareItemRepository.updateWareItem(wareItem.id, wareItem);
             console.log('Operação Sucedida!');
@@ -262,7 +265,7 @@ export default class WarehouseSystem {
 
     async deleteWareItem(): Promise<void> {
         try {
-            let id: number = utils.inputNumber('Id do Lote: ')             
+            let id: number = inputUtils.inputNumber('Id do Lote: ')             
             await this.wareItemRepository.deleteWareItem(id);
             console.log('Operação Sucedida!');
         } catch (error) {

@@ -11,6 +11,7 @@ export class Perishable extends WarehouseItem {
         this._expirationDate = expirationDate;
     }
 
+    
     get expirationDate(): Date {
         return this._expirationDate;
     }
