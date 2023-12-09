@@ -1,17 +1,19 @@
 import Item from "../../Item/entities/item";
 import { WareHouse } from "../../ware_house/entities/warehouse";
+import { IWareHouseItemValidation } from "../validations/i_warehouse_item_validation";
 
 
-export default class WarehouseItem {
-    private _id: number;
+export default abstract class WarehouseItem {
+    protected _id: number;
     private _item: Item;
     private _warehouse: WareHouse;
     private _insertionDate: Date;
     private _amount: number;
     private _location: string;
+    protected _validations: IWareHouseItemValidation[] = [];
 
-    constructor({id, item, warehouse, insertionDate, amount, location} : 
-        {id: number; item: Item; warehouse: WareHouse, insertionDate: Date; amount: number; location: string;}) {
+    constructor({ id, item, warehouse, insertionDate, amount, location }:
+        { id: number; item: Item; warehouse: WareHouse, insertionDate: Date; amount: number; location: string; }) {
         this._id = id;
         this._item = item;
         this._warehouse = warehouse;
@@ -38,12 +40,12 @@ export default class WarehouseItem {
     get amount(): number {
         return this._amount;
     }
-    
+
     get location(): string {
         return this._location;
     }
-    
-    set id(newId: number){
+
+    set id(newId: number) {
         this._id = newId;
     }
 
@@ -62,40 +64,28 @@ export default class WarehouseItem {
     set amount(newAmount: number) {
         this._amount = newAmount;
     }
-    
+
     set location(newLocation: string) {
         this._location = newLocation;
     }
-    
-    toList(): Array<any> {
-        let objectList: Array<any> = new Array();
-        objectList[0] = this.item.id;
-        objectList[1] = this.warehouse.id;
-        objectList[2] = this.insertionDate;
-        objectList[3] = this.amount;
-        objectList[4] = this.location;
-        objectList[5] = 'NULL';
-        return objectList;
-    }
-    
-    static fromMap(map: Map<string, any>): WarehouseItem {
-        return new WarehouseItem({
-            id: map.get('WARE_ITEM_ID'),
-            item: map.get('ITEM_ID'),
-            warehouse: map.get('WAREHOUSE_ID'),
-            insertionDate: new Date(<string> map.get('INSERTION_DATE')), 
-            amount: map.get('AMOUNT'), 
-            location: map.get('LOCATION'),
-        });
+
+
+    validate(): void {
+        this.setValidations();
+        for (let validation of this._validations) {
+            validation.validate(this);
+        }
     }
 
-    toString(): string {
-        let string = 
-        `Id: ${this.id}                         Item: ${this.item}
-         Almoxarifado: ${this.warehouse}        Data de Inserção: ${this.insertionDate}
-         Quantidade: ${this.amount}             Localização: ${this._location}`
+    protected abstract setValidations(): void
 
-        return string;
-    }
+    abstract toList(): Array<any>
+
+    abstract toString(): string
+
+    abstract getStringValuesToSql(): string
+
+    // abstract fromMap(map: Map<string, any>): WarehouseItem
+
 
 }
